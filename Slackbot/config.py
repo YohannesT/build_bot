@@ -16,6 +16,8 @@ cache_location = ''
 initialized = False
 
 def init():
+    global bot_name, token, bot_id, bot_sleep_delay    ,bamboo_plans_endpoint    ,bamboo_queue_build_endpoint    ,bamboo_uid    ,bamboo_pwd,cache_location
+
     settings_file = open('./settings.json');
     settings = json.loads(settings_file.read());
     settings_file.close()

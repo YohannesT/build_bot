@@ -1,23 +1,22 @@
 import os, slackclient, time, re, config, messageid, bamboo
 import random
 
-assistant = slackclient.SlackClient(constants.token)
+assistant = None
 
-is_ok = assistant.api_call("users.list").get('ok')
-
-slack_mention = '<@{name}>'.format(name = constants.bot_name)
 
 def is_for_me(event):
     type = event.get('type')
-    if type and type == 'message' and not(event.get('user') == constants.bot_id):
+    if type and type == 'message' and not(event.get('user') == config.bot_id):
         if is_private(event):
             return True
 
-        text = event.get('text')
-        channel = event.get('channel')
+    return False
 
-        if slack_mention in text.strip().split():
-            return true
+        #text = event.get('text')
+        #channel = event.get('channel')
+
+        #if slack_mention in text.strip().split():
+        #    return true
 
 def post_message(message, channel):
     assistant.api_call('chat.postMessage', channel=channel, text=message, as_user = True)
@@ -57,4 +56,9 @@ def run():
 if __name__ == '__main__':
     if not config.initialized:
         config.init()
+    
+    assistant = slackclient.SlackClient(config.token)
+    
+    is_ok = assistant.api_call("users.list").get('ok')
+    #time.sleep(15)
     run()
