@@ -1,7 +1,7 @@
 import re, json, os
 from enum import Enum
 
-build_key_pattern = re.compile(r'(build) (S2S|EMS)-(\d\d\d\d?)')
+build_key_pattern = re.compile(r'(build) (S2S|EMS)-(\d\d\d\d?)', re.IGNORECASE)
 
 bot_name = ''
 token = ''

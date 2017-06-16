@@ -19,14 +19,15 @@ def build(message):
     
     plans = get_plans()['plans']['plan']
 
-    plan_key = get_plan_key(plans, search_key)
+    plan_key = get_plan_key(plans, project_key, search_key)
 
     if plan_key == None:
         raise "I couldn't find the plan. Are you sure it exists?"
 
     result = start_build(plan_key)
+    print(result)
 
-def get_plan_key(plans, search_key):
+def get_plan_key(plans, project_key, search_key):
     for plan in plans:
         if plan['projectKey'] != project_key:
             continue
@@ -50,8 +51,9 @@ def get_plans():
     return plans
 
 def start_build(plan_key):
-    result = requests.post(config.bamboo_queue_build_endpoint + '/' + str(plan_key), auth=myAuth, headers={'X-Atlassian-Token':'no-check'})
-    result.text()
+    uri = config.bamboo_queue_build_endpoint + str(plan_key)
+    result = requests.post(uri, auth=myAuth, headers={'X-Atlassian-Token':'no-check'})
+    #result.text()
     
 if __name__ == '__main__':
     build('build S2S-896')

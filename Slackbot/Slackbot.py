@@ -34,6 +34,7 @@ def handle_message(message, user, channel):
         post_message('bye ' + get_mention(user), channel=channel)
     elif messageid.is_build_request(message):
         post_message('building... ' + get_mention(user), channel=channel)
+        bamboo.build(message)
     else:
         post_message('http://s2.quickmeme.com/img/fd/fd8203b8ac30c066f72af14c3fab9c6256640c5046a6555ff5d90aa8e2d5fe45.jpg', channel = channel)
 
