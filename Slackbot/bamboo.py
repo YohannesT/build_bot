@@ -1,13 +1,15 @@
-import sys, requests, json, xml, queue, config
+import sys, requests, json, xml, queue, shelve, config
 from requests.auth import HTTPBasicAuth
 
-myAuth = HTTPBasicAuth('test', 'test')
+myAuth = HTTPBasicAuth(config.bamboo_uid, config.bamboo_pwd)
 
-
+"""
+State = [Idle, WaitingToBuild, Building]
+"""
 build_queue = queue.Queue();
 
 def build(message):
-    result = globals.build_key_pattern.search(message)
+    result = config.build_key_pattern.search(message)
     if result is None:
         raise BaseException("not a build message")
 
@@ -20,7 +22,7 @@ def build(message):
     plan_key = get_plan_key(plans, search_key)
 
     if plan_key == None:
-        raise 'Plan not found'
+        raise "I couldn't find the plan. Are you sure it exists?"
 
     result = start_build(plan_key)
 
@@ -34,6 +36,13 @@ def get_plan_key(plans, search_key):
                 return branch['key']
     return None
             
+def is_build_running():
+    #implement
+    return True
+
+def is_someone_testing():
+    #implement
+    return True
 
 def get_plans():
     result = requests.get(config.bamboo_plans_endpoint, params = {'expand':'plans.plan.branches.branch.latestResult'}, auth=myAuth)
@@ -43,6 +52,7 @@ def get_plans():
 def start_build(plan_key):
     result = requests.post(config.bamboo_queue_build_endpoint + '/' + str(plan_key), auth=myAuth, headers={'X-Atlassian-Token':'no-check'})
     result.text()
-
+    
 if __name__ == '__main__':
     build('build S2S-896')
+    

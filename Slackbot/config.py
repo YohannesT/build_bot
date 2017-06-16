@@ -1,4 +1,4 @@
-import re, json
+import re, json, os
 from enum import Enum
 
 build_key_pattern = re.compile(r'(build) (S2S|EMS)-(\d\d\d\d?)')
@@ -11,8 +11,9 @@ bamboo_plans_endpoint = ''
 bamboo_queue_build_endpoint = ''
 bamboo_uid = ''
 bamboo_pwd = ''
+cache_location = ''
 
-loaded = False
+initialized = False
 
 def init():
     settings_file = open('./settings.json');
@@ -29,6 +30,11 @@ def init():
 
     bamboo_uid = settings['bamboo']['auth']['uid']
     bamboo_pwd = settings['bamboo']['auth']['pwd']
+
+    cache_location = settings['cacheLocation']
+    if not os.path.exists(cache_location):
+        os.mkdir(cache_location)
+
     loaded = True
 
 init();

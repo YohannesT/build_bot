@@ -1,4 +1,4 @@
-import os, slackclient, time, re, globals, messageid, bamboo
+import os, slackclient, time, re, config, messageid, bamboo
 import random
 
 assistant = slackclient.SlackClient(constants.token)
@@ -50,9 +50,11 @@ def run():
                     print(event)
                     if is_for_me(event):
                         handle_message(event.get('text'), event.get('user'), event.get('channel'))
-                    time.sleep(constants.bot_sleep_delay)
+                    time.sleep(config.bot_sleep_delay)
     else:
         print('assistant bot is offline')
 
 if __name__ == '__main__':
+    if not config.initialized:
+        config.init()
     run()
